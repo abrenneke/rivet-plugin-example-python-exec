@@ -3,16 +3,19 @@
   "packageManager": "yarn@3.5.0",
   "type": "module",
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b && tsx bundle.ts"
   },
   "dependencies": {
     "@ironclad/rivet-core": "^1.3.0",
-    "nanoid": "^5.0.1",
     "ts-dedent": "^2.2.0"
   },
   "devDependencies": {
+    "esbuild": "^0.19.2",
     "tsx": "^3.12.10",
     "typescript": "^5.2.2"
+  },
+  "resolutions": {
+    "@ironclad/rivet-core": "portal:/Users/Shared/ironclad/rivet/packages/core"
   },
   "volta": {
     "node": "20.6.1"

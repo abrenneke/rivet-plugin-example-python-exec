@@ -1,3 +1,35 @@
-import { examplePlugin } from "./plugin";
+import type { RivetPlugin, RivetPluginInitializer } from "@ironclad/rivet-core";
+import { examplePluginNode } from "./nodes/ExamplePluginNode.js";
 
-export default examplePlugin;
+export const plugin: RivetPluginInitializer = (rivet) => {
+  const exampleNode = examplePluginNode(rivet);
+
+  const examplePlugin: RivetPlugin = {
+    id: "example-plugin",
+    name: "Example Plugin",
+
+    configSpec: {
+      exampleSetting: {
+        type: "string",
+        label: "Example Setting",
+        description: "This is an example setting for the example plugin.",
+        helperText: "This is an example setting for the example plugin.",
+      },
+    },
+
+    contextMenuGroups: [
+      {
+        id: "example",
+        label: "Example",
+      },
+    ],
+
+    register: (register) => {
+      register(exampleNode);
+    },
+  };
+
+  return examplePlugin;
+};
+
+export default plugin;
