@@ -1,8 +1,12 @@
+<h1 align="center"><img src="https://rivet.ironcladapp.com/img/logo-banner-wide.png" alt="Rivet Logo"></h1>
+
 # Rivet Example Plugin
 
 This project is an example of a [Rivet](https://github.com/Ironclad/rivet) plugin. It is a minimal TypeScript Rivet plugin that adds a single node called Example Plugin Node.
 
 - [Using the plugin](#using-the-plugin)
+  - [In Rivet](#in-rivet)
+  - [In Code](#in-code)
 - [Making your own plugin](#making-your-own-plugin)
   - [⚠️ Important Notes ⚠️](#️-important-notes-️)
   - [1. Plugin Definition](#1-plugin-definition)
@@ -10,8 +14,12 @@ This project is an example of a [Rivet](https://github.com/Ironclad/rivet) plugi
   - [3. Bundling](#3-bundling)
   - [4. Committing](#4-committing)
   - [5. Serving your plugin](#5-serving-your-plugin)
+  - [Loading your plugin using the SDK](#loading-your-plugin-using-the-sdk)
+- [Local Development](#local-development)
 
 ## Using the plugin
+
+### In Rivet
 
 To use this plugin in Rivet:
 
@@ -24,6 +32,8 @@ To use this plugin in Rivet:
    ```
 
 3. The example plugin is now installed in your project. You can add the Example Plugin Node using the Add Node menu.
+
+### In Code
 
 ## Making your own plugin
 
@@ -70,3 +80,38 @@ If you have published your plugin on NPM, you can use the following URL:
 ```
 https://cdn.jsdelivr.net/npm/<your-package-name>/dist/bundle.js
 ```
+
+### Loading your plugin using the SDK
+
+First make sure your plugin is available on NPM or another method so it can be `import`ed.
+
+Load your plugin and Rivet into your application:
+
+```ts
+import * as Rivet from "@ironclad/rivet-core";
+import yourPlugin from "<your-package-name>";
+```
+
+Register your plugin with Rivet be using the `globalRivetNodeRegistry` or creating a new `NodeRegistration` and registering with that:
+
+```ts
+Rivet.globalRivetNodeRegistry.registerPlugin(yourPlugin(Rivet));
+```
+
+## Local Development
+
+For local development using this example, run `yarn dev` - this will:
+
+- Watch your TypeScript files with `tsc` and report any type errors
+- Watch your TypeScript files with `esbuild` and bundle them into `dist/bundle.js`
+- Serve the `dist` folder using `serve` on port 3000.
+
+You can then add your plugin to Rivet using the following URL:
+
+```
+http://localhost:3000/bundle.js
+```
+
+To refresh your changes in Rivet, reload the page by right clicking on any of the tabs at the top and selecting "Reload".
+
+![Reload in Rivet](./reload-in-rivet-example.png)
