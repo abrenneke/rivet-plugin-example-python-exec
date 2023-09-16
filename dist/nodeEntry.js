@@ -1,3 +1,4 @@
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -5,15 +6,12 @@ var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
-  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
-}) : x)(function(x) {
-  if (typeof require !== "undefined")
-    return require.apply(this, arguments);
-  throw Error('Dynamic require of "' + x + '" is not supported');
-});
-var __commonJS = (cb, mod) => function __require2() {
+var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
@@ -31,6 +29,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
   mod
 ));
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
@@ -60,10 +59,10 @@ var __privateMethod = (obj, member, method) => {
 
 // node_modules/isexe/windows.js
 var require_windows = __commonJS({
-  "node_modules/isexe/windows.js"(exports, module) {
-    module.exports = isexe;
+  "node_modules/isexe/windows.js"(exports, module2) {
+    module2.exports = isexe;
     isexe.sync = sync;
-    var fs = __require("fs");
+    var fs = require("fs");
     function checkPathExt(path3, options) {
       var pathext = options.pathExt !== void 0 ? options.pathExt : process.env.PATHEXT;
       if (!pathext) {
@@ -100,10 +99,10 @@ var require_windows = __commonJS({
 
 // node_modules/isexe/mode.js
 var require_mode = __commonJS({
-  "node_modules/isexe/mode.js"(exports, module) {
-    module.exports = isexe;
+  "node_modules/isexe/mode.js"(exports, module2) {
+    module2.exports = isexe;
     isexe.sync = sync;
-    var fs = __require("fs");
+    var fs = require("fs");
     function isexe(path3, options, cb) {
       fs.stat(path3, function(er, stat) {
         cb(er, er ? false : checkStat(stat, options));
@@ -133,15 +132,15 @@ var require_mode = __commonJS({
 
 // node_modules/isexe/index.js
 var require_isexe = __commonJS({
-  "node_modules/isexe/index.js"(exports, module) {
-    var fs = __require("fs");
+  "node_modules/isexe/index.js"(exports, module2) {
+    var fs = require("fs");
     var core;
     if (process.platform === "win32" || global.TESTING_WINDOWS) {
       core = require_windows();
     } else {
       core = require_mode();
     }
-    module.exports = isexe;
+    module2.exports = isexe;
     isexe.sync = sync;
     function isexe(path3, options, cb) {
       if (typeof options === "function") {
@@ -188,9 +187,9 @@ var require_isexe = __commonJS({
 
 // node_modules/which/which.js
 var require_which = __commonJS({
-  "node_modules/which/which.js"(exports, module) {
+  "node_modules/which/which.js"(exports, module2) {
     var isWindows = process.platform === "win32" || process.env.OSTYPE === "cygwin" || process.env.OSTYPE === "msys";
-    var path3 = __require("path");
+    var path3 = require("path");
     var COLON = isWindows ? ";" : ":";
     var isexe = require_isexe();
     var getNotFoundError = (cmd) => Object.assign(new Error(`not found: ${cmd}`), { code: "ENOENT" });
@@ -277,14 +276,14 @@ var require_which = __commonJS({
         return null;
       throw getNotFoundError(cmd);
     };
-    module.exports = which;
+    module2.exports = which;
     which.sync = whichSync;
   }
 });
 
 // node_modules/path-key/index.js
 var require_path_key = __commonJS({
-  "node_modules/path-key/index.js"(exports, module) {
+  "node_modules/path-key/index.js"(exports, module2) {
     "use strict";
     var pathKey2 = (options = {}) => {
       const environment = options.env || process.env;
@@ -294,16 +293,16 @@ var require_path_key = __commonJS({
       }
       return Object.keys(environment).reverse().find((key) => key.toUpperCase() === "PATH") || "Path";
     };
-    module.exports = pathKey2;
-    module.exports.default = pathKey2;
+    module2.exports = pathKey2;
+    module2.exports.default = pathKey2;
   }
 });
 
 // node_modules/cross-spawn/lib/util/resolveCommand.js
 var require_resolveCommand = __commonJS({
-  "node_modules/cross-spawn/lib/util/resolveCommand.js"(exports, module) {
+  "node_modules/cross-spawn/lib/util/resolveCommand.js"(exports, module2) {
     "use strict";
-    var path3 = __require("path");
+    var path3 = require("path");
     var which = require_which();
     var getPathKey = require_path_key();
     function resolveCommandAttempt(parsed, withoutPathExt) {
@@ -337,13 +336,13 @@ var require_resolveCommand = __commonJS({
     function resolveCommand(parsed) {
       return resolveCommandAttempt(parsed) || resolveCommandAttempt(parsed, true);
     }
-    module.exports = resolveCommand;
+    module2.exports = resolveCommand;
   }
 });
 
 // node_modules/cross-spawn/lib/util/escape.js
 var require_escape = __commonJS({
-  "node_modules/cross-spawn/lib/util/escape.js"(exports, module) {
+  "node_modules/cross-spawn/lib/util/escape.js"(exports, module2) {
     "use strict";
     var metaCharsRegExp = /([()\][%!^"`<>&|;, *?])/g;
     function escapeCommand(arg) {
@@ -361,25 +360,25 @@ var require_escape = __commonJS({
       }
       return arg;
     }
-    module.exports.command = escapeCommand;
-    module.exports.argument = escapeArgument;
+    module2.exports.command = escapeCommand;
+    module2.exports.argument = escapeArgument;
   }
 });
 
 // node_modules/shebang-regex/index.js
 var require_shebang_regex = __commonJS({
-  "node_modules/shebang-regex/index.js"(exports, module) {
+  "node_modules/shebang-regex/index.js"(exports, module2) {
     "use strict";
-    module.exports = /^#!(.*)/;
+    module2.exports = /^#!(.*)/;
   }
 });
 
 // node_modules/shebang-command/index.js
 var require_shebang_command = __commonJS({
-  "node_modules/shebang-command/index.js"(exports, module) {
+  "node_modules/shebang-command/index.js"(exports, module2) {
     "use strict";
     var shebangRegex = require_shebang_regex();
-    module.exports = (string = "") => {
+    module2.exports = (string = "") => {
       const match = string.match(shebangRegex);
       if (!match) {
         return null;
@@ -396,9 +395,9 @@ var require_shebang_command = __commonJS({
 
 // node_modules/cross-spawn/lib/util/readShebang.js
 var require_readShebang = __commonJS({
-  "node_modules/cross-spawn/lib/util/readShebang.js"(exports, module) {
+  "node_modules/cross-spawn/lib/util/readShebang.js"(exports, module2) {
     "use strict";
-    var fs = __require("fs");
+    var fs = require("fs");
     var shebangCommand = require_shebang_command();
     function readShebang(command) {
       const size = 150;
@@ -412,15 +411,15 @@ var require_readShebang = __commonJS({
       }
       return shebangCommand(buffer.toString());
     }
-    module.exports = readShebang;
+    module2.exports = readShebang;
   }
 });
 
 // node_modules/cross-spawn/lib/parse.js
 var require_parse = __commonJS({
-  "node_modules/cross-spawn/lib/parse.js"(exports, module) {
+  "node_modules/cross-spawn/lib/parse.js"(exports, module2) {
     "use strict";
-    var path3 = __require("path");
+    var path3 = require("path");
     var resolveCommand = require_resolveCommand();
     var escape = require_escape();
     var readShebang = require_readShebang();
@@ -474,13 +473,13 @@ var require_parse = __commonJS({
       };
       return options.shell ? parsed : parseNonShell(parsed);
     }
-    module.exports = parse;
+    module2.exports = parse;
   }
 });
 
 // node_modules/cross-spawn/lib/enoent.js
 var require_enoent = __commonJS({
-  "node_modules/cross-spawn/lib/enoent.js"(exports, module) {
+  "node_modules/cross-spawn/lib/enoent.js"(exports, module2) {
     "use strict";
     var isWin = process.platform === "win32";
     function notFoundError(original, syscall) {
@@ -519,7 +518,7 @@ var require_enoent = __commonJS({
       }
       return null;
     }
-    module.exports = {
+    module2.exports = {
       hookChildProcess,
       verifyENOENT,
       verifyENOENTSync,
@@ -530,9 +529,9 @@ var require_enoent = __commonJS({
 
 // node_modules/cross-spawn/index.js
 var require_cross_spawn = __commonJS({
-  "node_modules/cross-spawn/index.js"(exports, module) {
+  "node_modules/cross-spawn/index.js"(exports, module2) {
     "use strict";
-    var cp = __require("child_process");
+    var cp = require("child_process");
     var parse = require_parse();
     var enoent = require_enoent();
     function spawn(command, args, options) {
@@ -547,20 +546,20 @@ var require_cross_spawn = __commonJS({
       result.error = result.error || enoent.verifyENOENTSync(result.status, parsed);
       return result;
     }
-    module.exports = spawn;
-    module.exports.spawn = spawn;
-    module.exports.sync = spawnSync;
-    module.exports._parse = parse;
-    module.exports._enoent = enoent;
+    module2.exports = spawn;
+    module2.exports.spawn = spawn;
+    module2.exports.sync = spawnSync;
+    module2.exports._parse = parse;
+    module2.exports._enoent = enoent;
   }
 });
 
 // node_modules/merge-stream/index.js
 var require_merge_stream = __commonJS({
-  "node_modules/merge-stream/index.js"(exports, module) {
+  "node_modules/merge-stream/index.js"(exports, module2) {
     "use strict";
-    var { PassThrough } = __require("stream");
-    module.exports = function() {
+    var { PassThrough } = require("stream");
+    module2.exports = function() {
       var sources = [];
       var output = new PassThrough({ objectMode: true });
       output.setMaxListeners(0);
@@ -595,12 +594,19 @@ var require_merge_stream = __commonJS({
   }
 });
 
+// src/nodeEntry.ts
+var nodeEntry_exports = {};
+__export(nodeEntry_exports, {
+  runPythonScript: () => runPythonScript
+});
+module.exports = __toCommonJS(nodeEntry_exports);
+
 // node_modules/execa/index.js
+var import_node_buffer2 = require("buffer");
+var import_node_path2 = __toESM(require("path"), 1);
+var import_node_child_process3 = __toESM(require("child_process"), 1);
+var import_node_process4 = __toESM(require("process"), 1);
 var import_cross_spawn = __toESM(require_cross_spawn(), 1);
-import { Buffer as Buffer3 } from "buffer";
-import path2 from "path";
-import childProcess from "child_process";
-import process6 from "process";
 
 // node_modules/strip-final-newline/index.js
 function stripFinalNewline(input) {
@@ -616,9 +622,9 @@ function stripFinalNewline(input) {
 }
 
 // node_modules/npm-run-path/index.js
-import process2 from "process";
-import path from "path";
-import url from "url";
+var import_node_process = __toESM(require("process"), 1);
+var import_node_path = __toESM(require("path"), 1);
+var import_node_url = __toESM(require("url"), 1);
 
 // node_modules/npm-run-path/node_modules/path-key/index.js
 function pathKey(options = {}) {
@@ -635,23 +641,23 @@ function pathKey(options = {}) {
 // node_modules/npm-run-path/index.js
 function npmRunPath(options = {}) {
   const {
-    cwd = process2.cwd(),
-    path: path_ = process2.env[pathKey()],
-    execPath = process2.execPath
+    cwd = import_node_process.default.cwd(),
+    path: path_ = import_node_process.default.env[pathKey()],
+    execPath = import_node_process.default.execPath
   } = options;
   let previous;
-  const cwdString = cwd instanceof URL ? url.fileURLToPath(cwd) : cwd;
-  let cwdPath = path.resolve(cwdString);
+  const cwdString = cwd instanceof URL ? import_node_url.default.fileURLToPath(cwd) : cwd;
+  let cwdPath = import_node_path.default.resolve(cwdString);
   const result = [];
   while (previous !== cwdPath) {
-    result.push(path.join(cwdPath, "node_modules/.bin"));
+    result.push(import_node_path.default.join(cwdPath, "node_modules/.bin"));
     previous = cwdPath;
-    cwdPath = path.resolve(cwdPath, "..");
+    cwdPath = import_node_path.default.resolve(cwdPath, "..");
   }
-  result.push(path.resolve(cwdString, execPath, ".."));
-  return [...result, path_].join(path.delimiter);
+  result.push(import_node_path.default.resolve(cwdString, execPath, ".."));
+  return [...result, path_].join(import_node_path.default.delimiter);
 }
-function npmRunPathEnv({ env = process2.env, ...options } = {}) {
+function npmRunPathEnv({ env = import_node_process.default.env, ...options } = {}) {
   env = { ...env };
   const path3 = pathKey({ env });
   options.path = env[path3];
@@ -736,10 +742,10 @@ onetime.callCount = (function_) => {
 var onetime_default = onetime;
 
 // node_modules/execa/lib/error.js
-import process3 from "process";
+var import_node_process2 = __toESM(require("process"), 1);
 
 // node_modules/human-signals/build/src/main.js
-import { constants as constants2 } from "os";
+var import_node_os2 = require("os");
 
 // node_modules/human-signals/build/src/realtime.js
 var getRealtimeSignals = () => {
@@ -757,7 +763,7 @@ var SIGRTMIN = 34;
 var SIGRTMAX = 64;
 
 // node_modules/human-signals/build/src/signals.js
-import { constants } from "os";
+var import_node_os = require("os");
 
 // node_modules/human-signals/build/src/core.js
 var SIGNALS = [
@@ -1048,7 +1054,7 @@ var normalizeSignal = ({
 }) => {
   const {
     signals: { [name]: constantSignal }
-  } = constants;
+  } = import_node_os.constants;
   const supported = constantSignal !== void 0;
   const number = supported ? constantSignal : defaultNumber;
   return { name, number, description, supported, action, forced, standard };
@@ -1097,7 +1103,7 @@ var getSignalByNumber = (number, signals2) => {
   };
 };
 var findSignalByNumber = (number, signals2) => {
-  const signal = signals2.find(({ name }) => constants2.signals[name] === number);
+  const signal = signals2.find(({ name }) => import_node_os2.constants.signals[name] === number);
   if (signal !== void 0) {
     return signal;
   }
@@ -1136,7 +1142,7 @@ var makeError = ({
   timedOut,
   isCanceled,
   killed,
-  parsed: { options: { timeout, cwd = process3.cwd() } }
+  parsed: { options: { timeout, cwd = import_node_process2.default.cwd() } }
 }) => {
   exitCode = exitCode === null ? void 0 : exitCode;
   signal = signal === null ? void 0 : signal;
@@ -1201,7 +1207,7 @@ var normalizeStdio = (options) => {
 };
 
 // node_modules/execa/lib/kill.js
-import os from "os";
+var import_node_os3 = __toESM(require("os"), 1);
 
 // node_modules/signal-exit/dist/mjs/signals.js
 var signals = [];
@@ -1486,7 +1492,7 @@ var setKillTimeout = (kill, signal, options, killResult) => {
   }
 };
 var shouldForceKill = (signal, { forceKillAfterTimeout }, killResult) => isSigterm(signal) && forceKillAfterTimeout !== false && killResult;
-var isSigterm = (signal) => signal === os.constants.signals.SIGTERM || typeof signal === "string" && signal.toUpperCase() === "SIGTERM";
+var isSigterm = (signal) => signal === import_node_os3.default.constants.signals.SIGTERM || typeof signal === "string" && signal.toUpperCase() === "SIGTERM";
 var getForceKillAfterTimeout = ({ forceKillAfterTimeout = true }) => {
   if (forceKillAfterTimeout === true) {
     return DEFAULT_FORCE_KILL_TIMEOUT;
@@ -1539,8 +1545,8 @@ var setExitHandler = async (spawned, { cleanup, detached }, timedPromise) => {
 };
 
 // node_modules/execa/lib/pipe.js
-import { createWriteStream } from "fs";
-import { ChildProcess } from "child_process";
+var import_node_fs = require("fs");
+var import_node_child_process = require("child_process");
 
 // node_modules/is-stream/index.js
 function isStream(stream) {
@@ -1551,10 +1557,10 @@ function isWritableStream(stream) {
 }
 
 // node_modules/execa/lib/pipe.js
-var isExecaChildProcess = (target) => target instanceof ChildProcess && typeof target.then === "function";
+var isExecaChildProcess = (target) => target instanceof import_node_child_process.ChildProcess && typeof target.then === "function";
 var pipeToTarget = (spawned, streamName, target) => {
   if (typeof target === "string") {
-    spawned[streamName].pipe(createWriteStream(target));
+    spawned[streamName].pipe((0, import_node_fs.createWriteStream)(target));
     return spawned;
   }
   if (isWritableStream(target)) {
@@ -1583,8 +1589,8 @@ var addPipeMethods = (spawned) => {
 };
 
 // node_modules/execa/lib/stream.js
-import { createReadStream, readFileSync } from "fs";
-import { setTimeout as setTimeout2 } from "timers/promises";
+var import_node_fs2 = require("fs");
+var import_promises = require("timers/promises");
 
 // node_modules/get-stream/source/contents.js
 var getStreamContents = async (stream, { init, convertChunk, getSize, truncateChunk, addChunk, getFinalChunk, finalize }, { maxBuffer = Number.POSITIVE_INFINITY } = {}) => {
@@ -1780,7 +1786,7 @@ var getInputSync = ({ input, inputFile }) => {
     return input;
   }
   validateInputOptions(input);
-  return readFileSync(inputFile);
+  return (0, import_node_fs2.readFileSync)(inputFile);
 };
 var handleInputSync = (options) => {
   const input = getInputSync(options);
@@ -1794,7 +1800,7 @@ var getInput = ({ input, inputFile }) => {
     return input;
   }
   validateInputOptions(input);
-  return createReadStream(inputFile);
+  return (0, import_node_fs2.createReadStream)(inputFile);
 };
 var handleInput = (spawned, options) => {
   const input = getInput(options);
@@ -1824,7 +1830,7 @@ var getBufferedData = async (stream, streamPromise) => {
   if (!stream || streamPromise === void 0) {
     return;
   }
-  await setTimeout2(0);
+  await (0, import_promises.setTimeout)(0);
   stream.destroy();
   try {
     return await streamPromise;
@@ -1892,8 +1898,8 @@ var getSpawnedPromise = (spawned) => new Promise((resolve, reject) => {
 });
 
 // node_modules/execa/lib/command.js
-import { Buffer as Buffer2 } from "buffer";
-import { ChildProcess as ChildProcess2 } from "child_process";
+var import_node_buffer = require("buffer");
+var import_node_child_process2 = require("child_process");
 var normalizeArgs = (file, args = []) => {
   if (!Array.isArray(args)) {
     return [file];
@@ -1918,12 +1924,12 @@ var parseExpression = (expression) => {
   if (typeOfExpression === "number") {
     return String(expression);
   }
-  if (typeOfExpression === "object" && expression !== null && !(expression instanceof ChildProcess2) && "stdout" in expression) {
+  if (typeOfExpression === "object" && expression !== null && !(expression instanceof import_node_child_process2.ChildProcess) && "stdout" in expression) {
     const typeOfStdout = typeof expression.stdout;
     if (typeOfStdout === "string") {
       return expression.stdout;
     }
-    if (Buffer2.isBuffer(expression.stdout)) {
+    if (import_node_buffer.Buffer.isBuffer(expression.stdout)) {
       return expression.stdout.toString();
     }
     throw new TypeError(`Unexpected "${typeOfStdout}" stdout in template expression`);
@@ -1963,9 +1969,9 @@ var parseTemplates = (templates, expressions) => {
 };
 
 // node_modules/execa/lib/verbose.js
-import { debuglog } from "util";
-import process5 from "process";
-var verboseDefault = debuglog("execa").enabled;
+var import_node_util = require("util");
+var import_node_process3 = __toESM(require("process"), 1);
+var verboseDefault = (0, import_node_util.debuglog)("execa").enabled;
 var padField = (field, padding) => String(field).padStart(padding, "0");
 var getTimestamp = () => {
   const date = /* @__PURE__ */ new Date();
@@ -1975,14 +1981,14 @@ var logCommand = (escapedCommand, { verbose }) => {
   if (!verbose) {
     return;
   }
-  process5.stderr.write(`[${getTimestamp()}] ${escapedCommand}
+  import_node_process3.default.stderr.write(`[${getTimestamp()}] ${escapedCommand}
 `);
 };
 
 // node_modules/execa/index.js
 var DEFAULT_MAX_BUFFER = 1e3 * 1e3 * 100;
 var getEnv = ({ env: envOption, extendEnv, preferLocal, localDir, execPath }) => {
-  const env = extendEnv ? { ...process6.env, ...envOption } : envOption;
+  const env = extendEnv ? { ...import_node_process4.default.env, ...envOption } : envOption;
   if (preferLocal) {
     return npmRunPathEnv({ env, cwd: localDir, execPath });
   }
@@ -1999,8 +2005,8 @@ var handleArguments = (file, args, options = {}) => {
     stripFinalNewline: true,
     extendEnv: true,
     preferLocal: false,
-    localDir: options.cwd || process6.cwd(),
-    execPath: process6.execPath,
+    localDir: options.cwd || import_node_process4.default.cwd(),
+    execPath: import_node_process4.default.execPath,
     encoding: "utf8",
     reject: true,
     cleanup: true,
@@ -2011,13 +2017,13 @@ var handleArguments = (file, args, options = {}) => {
   };
   options.env = getEnv(options);
   options.stdio = normalizeStdio(options);
-  if (process6.platform === "win32" && path2.basename(file, ".exe") === "cmd") {
+  if (import_node_process4.default.platform === "win32" && import_node_path2.default.basename(file, ".exe") === "cmd") {
     args.unshift("/q");
   }
   return { file, args, options, parsed };
 };
 var handleOutput = (options, value, error) => {
-  if (typeof value !== "string" && !Buffer3.isBuffer(value)) {
+  if (typeof value !== "string" && !import_node_buffer2.Buffer.isBuffer(value)) {
     return error === void 0 ? void 0 : "";
   }
   if (options.stripFinalNewline) {
@@ -2033,9 +2039,9 @@ function execa(file, args, options) {
   validateTimeout(parsed.options);
   let spawned;
   try {
-    spawned = childProcess.spawn(parsed.file, parsed.args, parsed.options);
+    spawned = import_node_child_process3.default.spawn(parsed.file, parsed.args, parsed.options);
   } catch (error) {
-    const dummySpawned = new childProcess.ChildProcess();
+    const dummySpawned = new import_node_child_process3.default.ChildProcess();
     const errorPromise = Promise.reject(makeError({
       error,
       stdout: "",
@@ -2110,7 +2116,7 @@ function execaSync(file, args, options) {
   const input = handleInputSync(parsed.options);
   let result;
   try {
-    result = childProcess.spawnSync(parsed.file, parsed.args, { ...parsed.options, input });
+    result = import_node_child_process3.default.spawnSync(parsed.file, parsed.args, { ...parsed.options, input });
   } catch (error) {
     throw makeError({
       error,
@@ -2184,16 +2190,15 @@ function create$(options) {
 var $ = create$();
 
 // src/impl/runPythonScript.ts
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
-var __dirname = fileURLToPath(dirname(import.meta.url));
+var import_node_path3 = require("path");
 async function runPythonScript(path3, args) {
   if (path3 === "") {
-    path3 = join(__dirname, "..", "scripts", "python-script.py");
+    path3 = (0, import_node_path3.join)(__dirname, "..", "scripts", "python-script.py");
   }
   const { stdout } = await execa("python3", [path3, ...args]);
   return stdout;
 }
-export {
+// Annotate the CommonJS export names for ESM import in node:
+0 && (module.exports = {
   runPythonScript
-};
+});

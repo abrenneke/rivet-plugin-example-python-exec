@@ -31,7 +31,7 @@ const nodeBundleOptions: esbuild.BuildOptions = {
   platform: "node",
   target: "es2020",
   outfile: "dist/nodeEntry.js",
-  format: "esm",
+  format: "cjs",
 };
 
 if (process.argv.includes("--watch")) {

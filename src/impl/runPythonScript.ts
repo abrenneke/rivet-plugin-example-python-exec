@@ -1,8 +1,5 @@
 import { execa } from "execa";
-import { join, dirname } from "node:path";
-import { fileURLToPath } from "url";
-
-const __dirname = fileURLToPath(dirname(import.meta.url));
+import { join } from "node:path";
 
 export async function runPythonScript(
   path: string,
