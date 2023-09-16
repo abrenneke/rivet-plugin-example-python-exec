@@ -1,6 +1,6 @@
-// src/nodes/ExamplePluginNode.ts
-function examplePluginNode(rivet) {
-  const ExamplePluginNodeImpl = {
+// src/nodes/RunPythonScriptNode.ts
+function RunPythonScriptNode_default(rivet) {
+  const nodeImpl = {
     // This should create a new instance of your node type from scratch.
     create() {
       const node = {
@@ -8,12 +8,13 @@ function examplePluginNode(rivet) {
         id: rivet.newId(),
         // This is the default data that your node will store
         data: {
-          someData: "Hello World"
+          scriptPath: "",
+          arguments: ""
         },
         // This is the default title of your node.
-        title: "Example Plugin Node",
+        title: "Run Python Script",
         // This must match the type of your node.
-        type: "examplePlugin",
+        type: "runPythonScript",
         // X and Y should be set to 0. Width should be set to a reasonable number so there is no overflow.
         visualData: {
           x: 0,
@@ -27,11 +28,18 @@ function examplePluginNode(rivet) {
     // connection, nodes, and project are for advanced use-cases and can usually be ignored.
     getInputDefinitions(data, _connections, _nodes, _project) {
       const inputs = [];
-      if (data.useSomeDataInput) {
+      if (data.useScriptPathInput) {
         inputs.push({
-          id: "someData",
+          id: "scriptPath",
           dataType: "string",
-          title: "Some Data"
+          title: "Script Path"
+        });
+      }
+      if (data.useArgumentsInput) {
+        inputs.push({
+          id: "arguments",
+          dataType: "string[]",
+          title: "Arguments"
         });
       }
       return inputs;
@@ -41,19 +49,19 @@ function examplePluginNode(rivet) {
     getOutputDefinitions(_data, _connections, _nodes, _project) {
       return [
         {
-          id: "someData",
+          id: "output",
           dataType: "string",
-          title: "Some Data"
+          title: "Output"
         }
       ];
     },
     // This returns UI information for your node, such as how it appears in the context menu.
     getUIData() {
       return {
-        contextMenuTitle: "Example Plugin",
+        contextMenuTitle: "Run Python Script",
         group: "Example",
-        infoBoxBody: "This is an example plugin node.",
-        infoBoxTitle: "Example Plugin Node"
+        infoBoxBody: "This is an example of running a python script using a rivet node.",
+        infoBoxTitle: "Run Python Script Node"
       };
     },
     // This function defines all editors that appear when you edit your node.
@@ -61,9 +69,15 @@ function examplePluginNode(rivet) {
       return [
         {
           type: "string",
-          dataKey: "someData",
-          useInputToggleDataKey: "useSomeDataInput",
-          label: "Some Data"
+          dataKey: "scriptPath",
+          useInputToggleDataKey: "useScriptPathInput",
+          label: "Script Path"
+        },
+        {
+          type: "string",
+          dataKey: "arguments",
+          useInputToggleDataKey: "useArgumentsInput",
+          label: "Arguments"
         }
       ];
     },
@@ -71,52 +85,65 @@ function examplePluginNode(rivet) {
     // what the current data of the node is in some way that is useful at a glance.
     getBody(data) {
       return rivet.dedent`
-        Example Plugin Node
-        Data: ${data.useSomeDataInput ? "(Using Input)" : data.someData}
+        ${data.scriptPath} ${data.arguments}
       `;
     },
     // This is the main processing function for your node. It can do whatever you like, but it must return
     // a valid Outputs object, which is a map of port IDs to DataValue objects. The return value of this function
     // must also correspond to the output definitions you defined in the getOutputDefinitions function.
-    async process(data, inputData, _context) {
-      const someData = rivet.getInputOrData(
+    async process(data, inputData, context) {
+      if (context.executor !== "nodejs") {
+        throw new Error("This node can only be run using a nodejs executor.");
+      }
+      const scriptPath = rivet.getInputOrData(
         data,
         inputData,
-        "someData",
+        "scriptPath",
         "string"
       );
+      let args;
+      function splitArgs(args2) {
+        const matcher = /(?:[^\s"]+|"[^"]*")+/g;
+        return args2.match(matcher) || [];
+      }
+      const inputArguments = inputData["arguments"];
+      if (data.useArgumentsInput && inputArguments) {
+        if (rivet.isArrayDataType(inputArguments.type)) {
+          args = rivet.coerceType(inputArguments, "string[]");
+        } else {
+          const stringArgs = rivet.coerceType(inputArguments, "string");
+          args = splitArgs(stringArgs);
+        }
+      } else {
+        args = splitArgs(data.arguments);
+      }
+      const { runPythonScript } = await import("../dist/nodeEntry.js");
+      const output = await runPythonScript(scriptPath, args);
       return {
-        ["someData"]: {
+        ["output"]: {
           type: "string",
-          value: someData
+          value: output
         }
       };
     }
   };
-  const examplePluginNode2 = rivet.pluginNodeDefinition(
-    ExamplePluginNodeImpl,
-    "Example Plugin Node"
+  const nodeDefinition = rivet.pluginNodeDefinition(
+    nodeImpl,
+    "Run Python Script"
   );
-  return examplePluginNode2;
+  return nodeDefinition;
 }
 
 // src/index.ts
-var plugin = (rivet) => {
-  const exampleNode = examplePluginNode(rivet);
-  const examplePlugin = {
+var initializer = (rivet) => {
+  const node = RunPythonScriptNode_default(rivet);
+  const plugin = {
     // The ID of your plugin should be unique across all plugins.
-    id: "example-plugin",
+    id: "rivet-plugin-example-python-exec",
     // The name of the plugin is what is displayed in the Rivet UI.
-    name: "Example Plugin",
+    name: "Rivet Plugin Example - Python Exec",
     // Define all configuration settings in the configSpec object.
-    configSpec: {
-      exampleSetting: {
-        type: "string",
-        label: "Example Setting",
-        description: "This is an example setting for the example plugin.",
-        helperText: "This is an example setting for the example plugin."
-      }
-    },
+    configSpec: {},
     // Define any additional context menu groups your plugin adds here.
     contextMenuGroups: [
       {
@@ -127,12 +154,12 @@ var plugin = (rivet) => {
     // Register any additional nodes your plugin adds here. This is passed a `register`
     // function, which you can use to register your nodes.
     register: (register) => {
-      register(exampleNode);
+      register(node);
     }
   };
-  return examplePlugin;
+  return plugin;
 };
-var src_default = plugin;
+var src_default = initializer;
 export {
   src_default as default
 };

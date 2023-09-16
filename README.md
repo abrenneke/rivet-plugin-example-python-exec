@@ -1,8 +1,8 @@
 <h1 align="center"><img src="https://rivet.ironcladapp.com/img/logo-banner-wide.png" alt="Rivet Logo"></h1>
 
-# Rivet Example Plugin
+# Rivet Example Plugin - Python Execution
 
-This project is an example of a [Rivet](https://github.com/Ironclad/rivet) plugin. It is a minimal TypeScript Rivet plugin that adds a single node called Example Plugin Node.
+This project is an example of a [Rivet](https://github.com/Ironclad/rivet) plugin that allows you to execute Python code in a Rivet node.
 
 - [Using the plugin](#using-the-plugin)
   - [In Rivet](#in-rivet)
@@ -12,7 +12,6 @@ This project is an example of a [Rivet](https://github.com/Ironclad/rivet) plugi
   - [1. Plugin Definition](#1-plugin-definition)
   - [2. Node Definitions](#2-node-definitions)
   - [3. Bundling](#3-bundling)
-  - [4. Committing](#4-committing)
   - [5. Serving your plugin](#5-serving-your-plugin)
   - [Loading your plugin using the SDK](#loading-your-plugin-using-the-sdk)
 - [Local Development](#local-development)
@@ -25,13 +24,8 @@ To use this plugin in Rivet:
 
 1. Navigate to the Project tab in the left sidebar. You will see a + button next to `Plugins`,
    click it to open the Add Plugin modal.
-2. In Add Remote Plugin, use this plugin's: [jsdelivr](https://www.jsdelivr.com/) URL:
-
-   ```
-   https://cdn.jsdelivr.net/gh/abrenneke/rivet-plugin-example@main/dist/bundle.js
-   ```
-
-3. The example plugin is now installed in your project. You can add the Example Plugin Node using the Add Node menu.
+2. In Add NPM Plugin, enter `rivet-plugin-example-python-exec` and click `Add NPM Plugin`.
+3. The example plugin is now installed in your project. You can add the Run Python Script using the Add Node menu, in the "Example" group..
 
 ### In Code
 
@@ -43,7 +37,11 @@ To use this plugin in Rivet:
 
 - You also cannot import nor bundle `@ironclad/rivet-core` in your plugin. The rivet core library is passed into your default export function as an argument. Be careful to only use `import type` statements for the core library, otherwise your plugin will not bundle successfully.
 
-This repository has examples for both bundling with [ESBuild](https://esbuild.github.io/) and only importing types from `@ironclad/rivet-core`.
+- This repo is also an example of a Node.js-only plugin. It is important that Node-only plugins are separated into two separate bundles - an isomorphic bundle that defines the plugin and all of the nodes, and a Node-only bundle that contains the node-only implementations. The isomorphic bundle is allowed to _dynamically_ import the node bundle, but cannot statically import it (except for types, of course).
+
+- **Currently, all node.js dependencies must be bundled into the node entry point, as node_modules is not installed for Rivet.**
+
+This repository has examples for both dual-bundling with [ESBuild](https://esbuild.github.io/), only importing types from `@ironclad/rivet-core`, and using `import()` to dynamically import the node bundle from the isomorphic bundle.
 
 ### 1. Plugin Definition
 
@@ -59,27 +57,14 @@ Follow the example in [src/nodes/ExamplePluginNode.ts](src/nodes/ExamplePluginNo
 
 ### 3. Bundling
 
-See [bundle.ts](bundle.ts) for an example of how to bundle your plugin. You can use any bundler you like, but you must bundle your plugin into a single file. You can use the [ESBuild](https://esbuild.github.io/) bundler to bundle your plugin into a single file.
+See [bundle.ts](bundle.ts) for an example of how to bundle your plugin. You can use any bundler you like, but you must bundle into two final files - an isomorphic bundle, and a node.js only bundle. You can use the [ESBuild](https://esbuild.github.io/) bundler to bundle your plugin into a single file.
 
-It is important that all external libraries are bundled, because browsers cannot load bare imports.
-
-### 4. Committing
-
-You should commit your bundled files to your repository, or provide your plugin on NPM.
+It is important that all external libraries are bundled in the _isomorphic bundle_, because browsers cannot load bare imports. However, you are allowed to
+import any external libraries in the _node bundle_. Note that as of now, dependencies of a bundle are not loaded. This means that node_modules dependencies must be bundled into the final bundle.
 
 ### 5. Serving your plugin
 
-You should use a CDN to serve your plugin. You can use [jsdelivr](https://www.jsdelivr.com/) to serve your plugin. You can use the following URL to serve your plugin (assuming you have bundled to `dist/bundle.js`):
-
-```
-https://cdn.jsdelivr.net/gh/<your-github-username>/<your-repo-name>@<your-branch-name>/dist/bundle.js
-```
-
-If you have published your plugin on NPM, you can use the following URL:
-
-```
-https://cdn.jsdelivr.net/npm/<your-package-name>/dist/bundle.js
-```
+You should then publish your plugin to NPM. The bundled files should be included, and the `"main"` field in your `package.json` should point to the isomorphic bundle.
 
 ### Loading your plugin using the SDK
 
@@ -100,18 +85,11 @@ Rivet.globalRivetNodeRegistry.registerPlugin(yourPlugin(Rivet));
 
 ## Local Development
 
-For local development using this example, run `yarn dev` - this will:
+1. Run `yarn dev` to start the compiler and bundler in watch mode. This will automatically recombine and rebundle your changes into the `dist` folder.
 
-- Watch your TypeScript files with `tsc` and report any type errors
-- Watch your TypeScript files with `esbuild` and bundle them into `dist/bundle.js`
-- Serve the `dist` folder using `serve` on port 3000.
+2. The Rivet application installs plugins from NPM into `%APPLOCALDATA/com.ironcladapp.rivet/plugin/[plugin-id]/package` - This is different for each OS. To copy your plugin install directory, open the Add Plugin dialog, and click the Copy button next to the directory shown.
 
-You can then add your plugin to Rivet using the following URL:
+   To develop locally, you have two options:
 
-```
-http://localhost:3000/bundle.js
-```
-
-To refresh your changes in Rivet, reload the page by right clicking on any of the tabs at the top and selecting "Reload".
-
-![Reload in Rivet](./reload-in-rivet-example.png)
+   - After each change to your compiled bundled, copy your bundled files into the above directory, and restart Rivet
+   - Turn the above plugin directory into your main plugin development directory, and do all your development from that directory. Restart Rivet after each change.

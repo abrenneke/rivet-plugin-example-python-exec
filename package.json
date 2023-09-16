@@ -1,7 +1,9 @@
 {
-  "name": "rivet-plugin-example",
+  "name": "rivet-plugin-example-python-exec",
   "packageManager": "yarn@3.5.0",
+  "version": "0.0.2",
   "type": "module",
+  "main": "dist/bundle.js",
   "scripts": {
     "build": "tsc -b && tsx bundle.ts",
     "dev": "run-p watch serve",
@@ -11,7 +13,8 @@
     "serve": "serve --config ../serve.json dist"
   },
   "dependencies": {
-    "@ironclad/rivet-core": "^1.4.0"
+    "@ironclad/rivet-core": "^1.5.0",
+    "execa": "^8.0.1"
   },
   "devDependencies": {
     "esbuild": "^0.19.2",
