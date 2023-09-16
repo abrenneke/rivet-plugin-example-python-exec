@@ -8,7 +8,7 @@ const rewriteNodeEntryPlugin: esbuild.Plugin = {
     build.onResolve({ filter: /\/nodeEntry$/ }, (args) => {
       return {
         external: true,
-        path: "../dist/nodeEntry.js",
+        path: "../dist/nodeEntry.cjs",
       };
     });
   },
