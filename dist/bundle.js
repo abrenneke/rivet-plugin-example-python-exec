@@ -117,7 +117,7 @@ function RunPythonScriptNode_default(rivet) {
       } else {
         args = splitArgs(data.arguments);
       }
-      const { runPythonScript } = await import("../dist/nodeEntry.js");
+      const { runPythonScript } = await import("../dist/nodeEntry.cjs");
       const output = await runPythonScript(scriptPath, args);
       return {
         ["output"]: {
