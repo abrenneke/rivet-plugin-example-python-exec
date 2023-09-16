@@ -30,7 +30,7 @@ const nodeBundleOptions: esbuild.BuildOptions = {
   bundle: true,
   platform: "node",
   target: "es2020",
-  outfile: "dist/nodeEntry.js",
+  outfile: "dist/nodeEntry.cjs",
   format: "cjs",
 };
 
