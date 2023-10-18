@@ -4,6 +4,9 @@
   "version": "0.0.7",
   "type": "module",
   "main": "dist/bundle.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -b && tsx bundle.ts",
     "dev": "run-p watch serve",
@@ -25,5 +28,8 @@
   },
   "volta": {
     "node": "20.6.1"
+  },
+  "rivet": {
+    "skipInstall": true
   }
 }
