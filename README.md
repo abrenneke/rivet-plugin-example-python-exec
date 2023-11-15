@@ -13,7 +13,6 @@ This project is an example of a [Rivet](https://github.com/Ironclad/rivet) plugi
   - [2. Node Definitions](#2-node-definitions)
   - [3. Bundling](#3-bundling)
   - [5. Serving your plugin](#5-serving-your-plugin)
-  - [Loading your plugin using the SDK](#loading-your-plugin-using-the-sdk)
 - [Local Development](#local-development)
 
 ## Using the plugin
@@ -28,6 +27,19 @@ To use this plugin in Rivet:
 3. The example plugin is now installed in your project. You can add the Run Python Script using the Add Node menu, in the "Example" group..
 
 ### In Code
+
+Load your plugin and Rivet into your application:
+
+```ts
+import * as Rivet from "@ironclad/rivet-core";
+import examplePlugin from "rivet-plugin-example-python-exec";
+```
+
+Register your plugin with Rivet be using the `globalRivetNodeRegistry` or creating a new `NodeRegistration` and registering with that:
+
+```ts
+Rivet.globalRivetNodeRegistry.registerPlugin(examplePlugin(Rivet));
+```
 
 ## Making your own plugin
 
@@ -66,30 +78,7 @@ import any external libraries in the _node bundle_. Note that as of now, depende
 
 You should then publish your plugin to NPM. The bundled files should be included, and the `"main"` field in your `package.json` should point to the isomorphic bundle.
 
-### Loading your plugin using the SDK
-
-First make sure your plugin is available on NPM or another method so it can be `import`ed.
-
-Load your plugin and Rivet into your application:
-
-```ts
-import * as Rivet from "@ironclad/rivet-core";
-import yourPlugin from "<your-package-name>";
-```
-
-Register your plugin with Rivet be using the `globalRivetNodeRegistry` or creating a new `NodeRegistration` and registering with that:
-
-```ts
-Rivet.globalRivetNodeRegistry.registerPlugin(yourPlugin(Rivet));
-```
-
 ## Local Development
 
-1. Run `yarn dev` to start the compiler and bundler in watch mode. This will automatically recombine and rebundle your changes into the `dist` folder.
-
-2. The Rivet application installs plugins from NPM into `%APPLOCALDATA/com.ironcladapp.rivet/plugin/[plugin-id]/package` - This is different for each OS. To copy your plugin install directory, open the Add Plugin dialog, and click the Copy button next to the directory shown.
-
-   To develop locally, you have two options:
-
-   - After each change to your compiled bundled, copy your bundled files into the above directory, and restart Rivet
-   - Turn the above plugin directory into your main plugin development directory, and do all your development from that directory. Restart Rivet after each change.
+1. Run `yarn dev` to start the compiler and bundler in watch mode. This will automatically recombine and rebundle your changes into the `dist` folder. This will also copy the bundled files into the plugin install directory.
+2. After each change, you must restart Rivet to see the changes.
